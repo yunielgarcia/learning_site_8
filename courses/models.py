@@ -14,6 +14,12 @@ class Course(models.Model):
     def __str__(self):
         return self.title
 
+    def time_to_complete(self):
+        # We do this here to avoid recursive importing since course_extras
+        # also import models.Course...
+        from courses.templatetags.course_extras import time_estimate
+        return '{} min.'.format(time_estimate(len(self.description.split())))
+
 
 class Step(models.Model):
     title = models.CharField(max_length=255)
